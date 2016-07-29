@@ -1,0 +1,12 @@
+{
+  "errors": [
+    {
+      "status": 400,
+      "title": "Invalid Parameter",
+      "detail": "The parameter 'id' is invalid.",
+      "source": {
+        "parameter": "id"
+      }
+    }
+  ]
+}

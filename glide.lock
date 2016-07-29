@@ -1,0 +1,23 @@
+hash: c08acb25f27102fa9d3c795f7faf07e3a174055023dd31b77162dd9af487c91b
+updated: 2016-07-29T15:28:39.482804701-07:00
+imports:
+- name: github.com/golang/lint
+  version: c7bacac2b21ca01afa1dee0acf64df3ce047c28f
+- name: github.com/google/go-querystring
+  version: 9235644dd9e52eeae6fa48efd539fdc351a0af53
+  subpackages:
+  - query
+- name: github.com/robmccoll/mitlru
+  version: 0b9a155754fc02f6a489a3cd921e664d7117b97b
+- name: github.com/stretchr/testify
+  version: d77da356e56a7428ad25149ca77381849a6a5232
+  subpackages:
+  - assert
+  - require
+- name: github.com/uber/uber-licence
+  version: e35b7f99af2d110505bc81d8a9449dafaa326730
+- name: golang.org/x/crypto
+  version: bc89c496413265e715159bdc8478ee9a92fdc265
+  subpackages:
+  - ssh/terminal
+devImports: []

@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "id": "1337",
+      "type": "some-object",
+      "attributes": {
+        "some_attribute": "some value"
+      },
+      "relationships": {
+        "some_relationship": {
+          "data": {
+            "id": "1337",
+            "type": "some-other-object",
+            "attributes": {
+              "some_attribute": "some value"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "links": {
+    "first": "https://api.hackerone.com/v1/reports/1333",
+    "prev": "https://api.hackerone.com/v1/reports/1336",
+    "self": "https://api.hackerone.com/v1/reports/1337",
+    "next": "https://api.hackerone.com/v1/reports/1338",
+    "last": "https://api.hackerone.com/v1/reports/1345"
+  }
+}
