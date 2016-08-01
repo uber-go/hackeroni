@@ -66,5 +66,5 @@ for {
 [doc]: https://godoc.org/github.com/uber-go/hackeroni/h1
 [ci-img]: https://travis-ci.org/uber-go/hackeroni.svg?branch=master
 [ci]: https://travis-ci.org/uber-go/hackeroni
-[cov-img]: https://coveralls.io/repos/github/uber-go/hackeroni/badge.svg?branch=master
+[cov-img]: https://coveralls.io/repos/github/uber-go/hackeroni/badge.svg?branch=master&
 [cov]: https://coveralls.io/github/uber-go/hackeroni?branch=master
