@@ -41,7 +41,7 @@ client := h1.NewClient(tp.Client())
 ```
 
 ## Pagination
-All requests for listing resources such as `Report` support pagination. Pagination options are described in the h1.ListOptions struct and passed to the list methods as an optional parameter. Pages information is available via the h1.ResponseLinks struct embedded in the h1.Response struct.
+All requests for listing resources such as `Report` support pagination. Pagination options are described in the `h1.ListOptions` struct and passed to the list methods as an optional parameter. Pages information is available via the `h1.ResponseLinks` struct embedded in the h1.Response struct.
 ```go
 filter := h1.ReportListFilter{
 	Program: []string{"uber"},
