@@ -30,7 +30,7 @@ fmt.Println("Report Title:", *report.Title)
 ```
 
 ## Authentication
-The `h1` library does not directly handle authentication. Instead, when creating a new client, you can pass a http.Client that handles authentication for you. It does provide a `APIAuthTransport` structure when using API Token authentication. It is used like this:
+The `h1` library does not directly handle authentication. Instead, when creating a new client, you can pass a `http.Client` that handles authentication for you. It does provide a `APIAuthTransport` structure when using API Token authentication. It is used like this:
 ```go
 tp := h1.APIAuthTransport{
 	APIIdentifier: "your-h1-api-token-identifier",
