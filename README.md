@@ -9,7 +9,7 @@ import "github.com/uber-go/hackeroni/h1"
 
 To list all reports matching a filter:
 ```go
-reports, _, err := client.Report.List(h1.ReportListOptions{
+reports, _, err := client.Report.List(h1.ReportListFilter{
 	Program: []string{"uber"},
 })
 if err != nil {
