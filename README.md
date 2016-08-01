@@ -62,8 +62,8 @@ for {
 }
 ```
 
-[doc-img]: https://godoc.org/github.com/uber-go/hackeroni?status.svg
-[doc]: https://godoc.org/github.com/uber-go/hackeroni
+[doc-img]: https://godoc.org/github.com/uber-go/hackeroni/h1?status.svg
+[doc]: https://godoc.org/github.com/uber-go/hackeroni/h1
 [ci-img]: https://travis-ci.org/uber-go/hackeroni.svg?branch=master
 [ci]: https://travis-ci.org/uber-go/hackeroni
 [cov-img]: https://coveralls.io/repos/github/uber-go/hackeroni/badge.svg?branch=master
