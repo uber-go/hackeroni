@@ -214,49 +214,7 @@ func Test_ActivityBugCloned(t *testing.T) {
 
 	actualActivity := actual.Activity().(*ActivityBugCloned)
 	expectedActivity := &ActivityBugCloned{
-		OriginalReport: &Report{
-			ID:    String("1336"),
-			Type:  String(ReportType),
-			Title: String("Original Report"),
-			VulnerabilityInformation: String("..."),
-			State:     String("new"),
-			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
-			Program: &Program{
-				ID:        String("1337"),
-				Type:      String(ProgramType),
-				Handle:    String("security"),
-				CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
-				UpdatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
-			},
-			VulnerabilityTypes: []VulnerabilityType{
-				VulnerabilityType{
-					ID:          String("1337"),
-					Type:        String(VulnerabilityTypeType),
-					Name:        String("Cross-Site Scripting (XSS)"),
-					Description: String("Failure of a site to validate, filter, or encode user input before returning it to another user's web client."),
-					CreatedAt:   NewTimestamp("2016-02-02T04:05:06.000Z"),
-				},
-			},
-			Reporter: &User{
-				ID:       String("1336"),
-				Type:     String(UserType),
-				Disabled: Bool(false),
-				Username: String("other_user"),
-				Name:     String("Other User"),
-				ProfilePicture: UserProfilePicture{
-					Size62x62:   String("/assets/avatars/default.png"),
-					Size82x82:   String("/assets/avatars/default.png"),
-					Size110x110: String("/assets/avatars/default.png"),
-					Size260x260: String("/assets/avatars/default.png"),
-				},
-				CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
-			},
-			Attachments: []Attachment{},
-			Swag:        []Swag{},
-			Activities:  []Activity{},
-			Bounties:    []Bounty{},
-			Summaries:   []ReportSummary{},
-		},
+		OriginalReportID: Int(1336),
 	}
 	assert.Equal(t, expectedActivity, actualActivity)
 
@@ -266,7 +224,7 @@ func Test_ActivityBugCloned(t *testing.T) {
 				assert.Fail(t, "Activity.Activity() with incorrect JSON should panic")
 			}
 		}()
-		actual.rawData = []byte(`{"relationships":123}`)
+		actual.rawData = []byte(`{"attributes":123}`)
 		actual.Activity()
 	}()
 

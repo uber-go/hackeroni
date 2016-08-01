@@ -184,17 +184,13 @@ func (a *ActivityBountySuggested) UnmarshalJSON(b []byte) error {
 //
 // HackerOne API docs: https://api.hackerone.com/docs/v1#activity-bug-cloned
 type ActivityBugCloned struct {
-	OriginalReport *Report `json:"original_report"`
+	OriginalReportID *int `json:"original_report_id"`
 }
 
 // Helper types for JSONUnmarshal
 type activityBugCloned ActivityBugCloned // Used to avoid recursion of JSONUnmarshal
 type activityBugClonedUnmarshalHelper struct {
-	Relationships struct {
-		OriginalReport struct {
-			Data *Report `json:"data"`
-		} `json:"original_report"`
-	} `json:"relationships"`
+	Attributes activityBugCloned `json:"attributes"`
 }
 
 // UnmarshalJSON allows JSONAPI attributes and relationships to unmarshal cleanly.
@@ -203,7 +199,7 @@ func (a *ActivityBugCloned) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &helper); err != nil {
 		return err
 	}
-	a.OriginalReport = helper.Relationships.OriginalReport.Data
+	*a = ActivityBugCloned(helper.Attributes)
 	return nil
 }
 
