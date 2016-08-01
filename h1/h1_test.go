@@ -141,8 +141,12 @@ func Test_NewRequest(t *testing.T) {
 	_, err := client.NewRequest("GET", "http://[fe80::1%en0]/", nil)
 	assert.NotNil(t, err)
 
-	// Check that an invalid method fails
-	_, err = client.NewRequest("INVALID METHOD", "/", nil)
+	// Check that an invalid base URL fails
+	badclient := NewClient(nil)
+	badclient.BaseURL = &url.URL{
+		Scheme: "http://[fe80::1%en0]/",
+	}
+	_, err = badclient.NewRequest("GET", "/", nil)
 	assert.NotNil(t, err)
 
 	// Check that a relative path resolves correctly
