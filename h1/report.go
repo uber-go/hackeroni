@@ -121,7 +121,7 @@ func (r *Report) UnmarshalJSON(b []byte) error {
 	r.VulnerabilityTypes = helper.Relationships.VulnerabilityTypes.Data
 	r.Reporter = helper.Relationships.Reporter.Data
 	r.Activities = helper.Relationships.Activities.Data
-	for idx, _ := range r.Activities {
+	for idx := range r.Activities {
 		r.Activities[idx].report = r
 	}
 	r.Bounties = helper.Relationships.Bounties.Data
