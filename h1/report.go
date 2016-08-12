@@ -149,3 +149,37 @@ func (r *Report) Assignee() (assignee interface{}) {
 	}
 	return assignee
 }
+
+// Helper function for Participants
+func appendUserIfMissing(slice []User, u User) []User {
+    for _, ele := range slice {
+        if *ele.ID == *u.ID {
+            return slice
+        }
+    }
+    return append(slice, u)
+}
+
+// Participants returns a list of participants in the report. It does not include the reporter
+func (r *Report) Participants(internal bool) (participants []User) {
+	// Loop each activity
+	for _, activity := range r.Activities {
+		// Skip internal if we are not interested in them
+		if *activity.Internal && !internal {
+			continue
+		}
+		// Get the actor (if it's not a user skip it)
+		user, success := activity.Actor().(*User)
+		if !success {
+			continue
+		}
+		// Skip the reporter
+		if *r.Reporter.ID == *user.ID {
+			continue
+		}
+		// Add to known participants list
+		participants = appendUserIfMissing(participants, *user)
+	}
+	// Return the results
+	return participants
+}

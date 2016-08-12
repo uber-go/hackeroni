@@ -78,6 +78,86 @@ func Test_Report(t *testing.T) {
 	loadResource(t, &activitiesReport, "tests/resources/report_activities.json")
 	assert.Equal(t, activitiesReport.Activities[0].Report(), &activitiesReport)
 
+	participantsActual := activitiesReport.Participants(false)
+	participantsExpected := []User{
+		User{
+			ID:       String("1337"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("api-example"),
+			Name:     String("API Example"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
+		User{
+			ID:       String("1338"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("hackeroni-example"),
+			Name:     String("Hackeroni Example"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
+	}
+	assert.Equal(t, participantsActual, participantsExpected)
+
+	internalParticipantsActual := activitiesReport.Participants(true)
+	internalParticipantsExpected := []User{
+		User{
+			ID:       String("1337"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("api-example"),
+			Name:     String("API Example"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
+		User{
+			ID:       String("1339"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("hackeroni-example2"),
+			Name:     String("Hackeroni Example 2"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
+		User{
+			ID:       String("1338"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("hackeroni-example"),
+			Name:     String("Hackeroni Example"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
+	}
+	assert.Equal(t, internalParticipantsActual, internalParticipantsExpected)
+
 	var assigneeUserReport Report
 	loadResource(t, &assigneeUserReport, "tests/resources/report_assignee-user.json")
 	assigneeUserActual := assigneeUserReport.Assignee().(*User)

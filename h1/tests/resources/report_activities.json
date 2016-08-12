@@ -1,5 +1,23 @@
 {
   "relationships": {
+    "reporter": {
+      "data": {
+        "id": "1336",
+        "type": "user",
+        "attributes": {
+          "username": "reporter",
+          "name": "Reporter",
+          "disabled": false,
+          "created_at": "2016-02-02T04:05:06.000Z",
+          "profile_picture": {
+            "62x62": "/assets/avatars/default.png",
+            "82x82": "/assets/avatars/default.png",
+            "110x110": "/assets/avatars/default.png",
+            "260x260": "/assets/avatars/default.png"
+          }
+        }
+      }
+    },
     "activities": {
       "data": [{
         "id": "1337",
@@ -32,21 +50,21 @@
         }
       }, {
         "id": "1337",
-        "type": "activity-bug-triaged",
+        "type": "activity-comment",
         "attributes": {
-          "message": "Bug Triaged!",
+          "message": "Comment!",
           "created_at": "2016-02-02T04:05:06.000Z",
           "updated_at": "2016-02-02T04:05:06.000Z",
-          "internal": false
+          "internal": true
         },
         "relationships": {
           "actor": {
             "data": {
-              "id": "1337",
+              "id": "1339",
               "type": "user",
               "attributes": {
-                "username": "api-example",
-                "name": "API Example",
+                "username": "hackeroni-example2",
+                "name": "Hackeroni Example 2",
                 "disabled": false,
                 "created_at": "2016-02-02T04:05:06.000Z",
                 "profile_picture": {
@@ -61,7 +79,65 @@
         }
       }, {
         "id": "1337",
-        "type": "activity-bug-resolved",
+        "type": "activity-comment",
+        "attributes": {
+          "message": "Comment 2!",
+          "created_at": "2016-02-02T04:05:06.000Z",
+          "updated_at": "2016-02-02T04:05:06.000Z",
+          "internal": true
+        },
+        "relationships": {
+          "actor": {
+            "data": {
+              "id": "1339",
+              "type": "user",
+              "attributes": {
+                "username": "hackeroni-example2",
+                "name": "Hackeroni Example 2",
+                "disabled": false,
+                "created_at": "2016-02-02T04:05:06.000Z",
+                "profile_picture": {
+                  "62x62": "/assets/avatars/default.png",
+                  "82x82": "/assets/avatars/default.png",
+                  "110x110": "/assets/avatars/default.png",
+                  "260x260": "/assets/avatars/default.png"
+                }
+              }
+            }
+          }
+        }
+      }, {
+        "id": "1337",
+        "type": "activity-bug-triaged",
+        "attributes": {
+          "message": "Bug Triaged!",
+          "created_at": "2016-02-02T04:05:06.000Z",
+          "updated_at": "2016-02-02T04:05:06.000Z",
+          "internal": false
+        },
+        "relationships": {
+          "actor": {
+            "data": {
+              "id": "1338",
+              "type": "user",
+              "attributes": {
+                "username": "hackeroni-example",
+                "name": "Hackeroni Example",
+                "disabled": false,
+                "created_at": "2016-02-02T04:05:06.000Z",
+                "profile_picture": {
+                  "62x62": "/assets/avatars/default.png",
+                  "82x82": "/assets/avatars/default.png",
+                  "110x110": "/assets/avatars/default.png",
+                  "260x260": "/assets/avatars/default.png"
+                }
+              }
+            }
+          }
+        }
+      }, {
+        "id": "1336",
+        "type": "activity-comment",
         "attributes": {
           "message": "Bug Resolved!",
           "created_at": "2016-02-02T04:05:06.000Z",
@@ -71,11 +147,11 @@
         "relationships": {
           "actor": {
             "data": {
-              "id": "1337",
+              "id": "1336",
               "type": "user",
               "attributes": {
-                "username": "api-example",
-                "name": "API Example",
+                "username": "reporter",
+                "name": "Reporter",
                 "disabled": false,
                 "created_at": "2016-02-02T04:05:06.000Z",
                 "profile_picture": {
@@ -84,6 +160,28 @@
                   "110x110": "/assets/avatars/default.png",
                   "260x260": "/assets/avatars/default.png"
                 }
+              }
+            }
+          }
+        }
+      }, {
+        "id": "1337",
+        "type": "activity-report-became-public",
+        "attributes": {
+          "message": "Report Became Public!",
+          "created_at": "2016-02-02T04:05:06.000Z",
+          "updated_at": "2016-02-02T04:05:06.000Z",
+          "internal": false
+        },
+        "relationships": {
+          "actor": {
+            "data": {
+              "id": "1337",
+              "type": "program",
+              "attributes": {
+                "handle": "security",
+                "created_at": "2016-02-02T04:05:06.000Z",
+                "updated_at": "2016-02-02T04:05:06.000Z"
               }
             }
           }
