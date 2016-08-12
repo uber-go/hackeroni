@@ -80,22 +80,17 @@ type ReportListFilter struct {
 	LastActivityAtLessThan            time.Time `url:"last_activity_at__lt,omitempty"`
 }
 
-// reportListRequest is used to combine the filter arguments and list options
-type reportListRequest struct {
-	*ListOptions
-	Filter ReportListFilter `url:"filter,brackets"`
-}
-
 // List returns all Reports matching the specified criteria
 //
 // HackerOne API docs: https://api.hackerone.com/docs/v1#reports/query
 func (s *ReportService) List(filterOpts ReportListFilter, listOpts *ListOptions) ([]Report, *Response, error) {
-	opts := reportListRequest{
-		ListOptions: listOpts,
-		Filter:      filterOpts,
+	opts := struct {
+		Filter ReportListFilter `url:"filter,brackets"`
+	}{
+		Filter: filterOpts,
 	}
 	// addOptions takes structs only so it can't fail
-	u, _ := addOptions("reports", &opts)
+	u, _ := addOptions("reports", &opts, listOpts)
 
 	req, err := s.client.NewRequest("GET", u, nil)
 	if err != nil {

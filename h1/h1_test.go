@@ -51,22 +51,25 @@ func Test_ResponseLinks(t *testing.T) {
 
 func Test_addOptions(t *testing.T) {
 	// Check that an invalid URL fails
-	_, err := addOptions("http://[fe80::1%en0]/", nil)
+	_, err := addOptions("http://[fe80::1%en0]/", nil, nil)
 	assert.NotNil(t, err)
 
 	// Check that invalid parameters fails
-	_, err = addOptions("https://hackerone.com/", "Invalid URL Query")
+	_, err = addOptions("https://hackerone.com/", "Invalid URL Query", nil)
 	assert.NotNil(t, err)
 
-	// Check that valid opts marshal correclty
+	// Check that valid opts marshal correctly
 	opts := struct {
 		Param string `url:"param"`
 	}{
 		Param: "value",
 	}
-	url, err := addOptions("https://hackerone.com/", opts)
+	listOpts := &ListOptions{
+		Page: 2,
+	}
+	url, err := addOptions("https://hackerone.com/", opts, listOpts)
 	assert.Nil(t, err)
-	assert.Equal(t, "https://hackerone.com/?param=value", url)
+	assert.Equal(t, "https://hackerone.com/?page%5Bnumber%5D=2&param=value", url)
 }
 
 func Test_ErrorResponse(t *testing.T) {

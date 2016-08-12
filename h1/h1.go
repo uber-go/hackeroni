@@ -68,7 +68,7 @@ type ListOptions struct {
 }
 
 // addOptions adds the parameters in opt as URL query parameters to s
-func addOptions(s string, opt interface{}) (string, error) {
+func addOptions(s string, opt interface{}, listOpts *ListOptions) (string, error) {
 	u, err := url.Parse(s)
 	if err != nil {
 		return s, err
@@ -77,6 +77,13 @@ func addOptions(s string, opt interface{}) (string, error) {
 	qs, err := query.Values(opt)
 	if err != nil {
 		return s, err
+	}
+
+	lqs, _ := query.Values(listOpts)
+	if lqs != nil {
+		for k, v := range lqs {
+			qs[k] = v
+		}
 	}
 
 	u.RawQuery = qs.Encode()
