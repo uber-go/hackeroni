@@ -152,12 +152,12 @@ func (r *Report) Assignee() (assignee interface{}) {
 
 // Helper function for Participants
 func appendUserIfMissing(slice []User, u User) []User {
-    for _, ele := range slice {
-        if *ele.ID == *u.ID {
-            return slice
-        }
-    }
-    return append(slice, u)
+	for _, ele := range slice {
+		if *ele.ID == *u.ID {
+			return slice
+		}
+	}
+	return append(slice, u)
 }
 
 // Participants returns a list of participants in the report. It does not include the reporter
