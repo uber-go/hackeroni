@@ -22,7 +22,7 @@ package legacy
 
 import (
 	"bytes"
-	"encoding/json"
+//	"encoding/json"
 	"fmt"
 	"net/url"
 )
@@ -147,7 +147,7 @@ func (s *ReportService) Create(handle string, report *Report) (*Response, error)
 }
 
 // AddSummary assigns a group by ID to a report
-func (s *ReportService) AddSummary(id uint64, summary *ReportSummary) (*Response, error) {
+/*func (s *ReportService) AddSummary(id uint64, summary *ReportSummary) (*Response, error) {
 	user, resp, err := s.client.Session.GetCurrentUser()
 	if err != nil {
 		return resp, err
@@ -180,7 +180,7 @@ func (s *ReportService) AddSummary(id uint64, summary *ReportSummary) (*Response
 	}
 
 	return resp, err
-}
+}*/
 
 // ReportBulkResponse is used as a response for multiple report methods
 type ReportBulkResponse struct {
@@ -260,13 +260,13 @@ func (s *ReportService) Close(id uint64, message string, state string, opts *Rep
 }
 
 // Reopen reopens a report
-func (s *ReportService) Reopen(id uint64, message string) (*ReportBulkResponse, *Response, error) {
+/*func (s *ReportService) Reopen(id uint64, message string) (*ReportBulkResponse, *Response, error) {
 	body := url.Values{
 		"message": []string{message},
 	}
 
 	return s.bulk(id, "reopen", body)
-}
+}*/
 
 // Comment comments on a report
 func (s *ReportService) Comment(id uint64, message string, internal bool) (*ReportBulkResponse, *Response, error) {
@@ -283,7 +283,7 @@ func (s *ReportService) Comment(id uint64, message string, internal bool) (*Repo
 }
 
 // AssignUser assigns a user by ID to a report
-func (s *ReportService) AssignUser(id uint64, message string, assignee uint64) (*ReportBulkResponse, *Response, error) {
+/*func (s *ReportService) AssignUser(id uint64, message string, assignee uint64) (*ReportBulkResponse, *Response, error) {
 	body := url.Values{
 		"message":     []string{message},
 		"substate":    []string{"user"},
@@ -302,4 +302,4 @@ func (s *ReportService) AssignGroup(id uint64, message string, assignee uint64) 
 	}
 
 	return s.bulk(id, "assign-to", body)
-}
+}*/

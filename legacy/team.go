@@ -21,7 +21,7 @@
 package legacy
 
 import (
-	"fmt"
+//	"fmt"
 )
 
 // TeamService handles communication with the report related methods of the H1 API.
@@ -76,7 +76,7 @@ type Team struct {
 }
 
 // GetByHandle a team by handle
-func (s *TeamService) Get(handle string) (*Team, *Response, error) {
+/*func (s *TeamService) Get(handle string) (*Team, *Response, error) {
 	req, err := s.client.NewRequest("GET", handle, nil)
 	if err != nil {
 		return nil, nil, err
@@ -91,7 +91,7 @@ func (s *TeamService) Get(handle string) (*Team, *Response, error) {
 	}
 
 	return team, resp, err
-}
+}*/
 
 // TeamProfileMetrics represents a H1 team's profile metrics
 type TeamProfileMetrics struct {
@@ -107,7 +107,7 @@ type TeamProfileMetrics struct {
 }
 
 // GetProfileMetrics returns the profile metrics of a team by handle
-func (s *TeamService) GetProfileMetrics(handle string) (*TeamProfileMetrics, *Response, error) {
+/*func (s *TeamService) GetProfileMetrics(handle string) (*TeamProfileMetrics, *Response, error) {
 	req, err := s.client.NewRequest("GET", fmt.Sprintf("%s/reporters", handle), nil)
 	if err != nil {
 		return nil, nil, err
@@ -140,7 +140,7 @@ func (s *TeamService) ListReporters(handle string) ([]User, *Response, error) {
 	}
 
 	return users, resp, err
-}
+}*/
 
 // CommonResponse represents a common ersponse object
 type CommonResponse struct {
@@ -149,7 +149,7 @@ type CommonResponse struct {
 	Message *string `json:"message"`
 }
 
-// ListCommonResponses returns the common responses for a team by handle
+/*// ListCommonResponses returns the common responses for a team by handle
 func (s *TeamService) ListCommonResponses(handle string) ([]CommonResponse, *Response, error) {
 	req, err := s.client.NewRequest("GET", fmt.Sprintf("%s/common_responses.json", handle), nil)
 	if err != nil {
@@ -165,4 +165,4 @@ func (s *TeamService) ListCommonResponses(handle string) ([]CommonResponse, *Res
 	}
 
 	return commonResponses, resp, err
-}
+}*/

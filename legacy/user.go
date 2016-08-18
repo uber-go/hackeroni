@@ -21,7 +21,7 @@
 package legacy
 
 import (
-	"fmt"
+//	"fmt"
 )
 
 // UserService handles communication with the report related methods of the H1 API.
@@ -55,7 +55,7 @@ type User struct {
 	TeamContext        *UserTeamContext   `json:"team_context"`
 }
 
-// Get looks up a user by username
+/*// Get looks up a user by username
 func (s *UserService) Get(username string) (*User, *Response, error) {
 	req, err := s.client.NewRequest("GET", username, nil)
 	if err != nil {
@@ -137,4 +137,4 @@ func (s *UserService) ListBadges(username string) ([]Badge, *Response, error) {
 	}
 
 	return wrapper.Items, resp, err
-}
+}*/

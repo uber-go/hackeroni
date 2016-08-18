@@ -58,7 +58,7 @@ func (s *SessionService) GetCurrentUser() (*SessionUser, *Response, error) {
 }
 
 // GetTeams returns the current user's teams
-func (s *SessionService) GetTeams() ([]Team, *Response, error) {
+/*func (s *SessionService) GetTeams() ([]Team, *Response, error) {
 	req, err := s.client.NewRequest("GET", "teams", nil)
 	if err != nil {
 		return nil, nil, err
@@ -73,7 +73,7 @@ func (s *SessionService) GetTeams() ([]Team, *Response, error) {
 	}
 
 	return teams, resp, err
-}
+}*/
 
 // Acquire attempts to authenticate with the provided credentials
 func (s *SessionService) Acquire(email string, password string) (*Response, error) {
