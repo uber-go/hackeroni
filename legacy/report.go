@@ -122,7 +122,7 @@ func (s *ReportService) Create(handle string, report *Report) (*Response, error)
 	body := url.Values{
 		"report[title]":                     []string{*report.Title},
 		"report[vulnerability_information]": []string{*report.VulnerabilityInformation},
-		"report[vulnerability_type_ids][]":  []string{"126768"}, // TODO: Don't hardcode this to None
+		"report[vulnerability_type_ids][]":  []string{"2959"}, // TODO: Don't hardcode this to None
 	}
 
 	req, err := s.client.NewRequest("POST", fmt.Sprintf("%s/reports", handle), bytes.NewBufferString(body.Encode()))
