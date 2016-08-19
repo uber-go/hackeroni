@@ -21,6 +21,8 @@
 package legacy
 
 import (
+	"github.com/google/go-querystring/query"
+
 	"bytes"
 //	"encoding/json"
 	"fmt"
@@ -119,11 +121,25 @@ func (s *ReportService) Create(handle string, report *Report) (*Response, error)
 		return resp, err
 	}
 
-	body := url.Values{
-		"report[title]":                     []string{*report.Title},
-		"report[vulnerability_information]": []string{*report.VulnerabilityInformation},
-		"report[vulnerability_type_ids][]":  []string{"2959"}, // TODO: Don't hardcode this to None
+	var vulnerabilityTypeIds []uint64
+	for _, vulnerabilityType := range report.VulnerabilityTypes {
+		vulnerabilityTypeIds = append(vulnerabilityTypeIds, *vulnerabilityType.ID)
 	}
+
+	type bodyReport struct {
+		Title string `url:"title"`
+		VulnerabilityInformation string `url:"vulnerability_information"`
+		VulnerabilityTypeIDs []uint64 `url:"vulnerability_type_ids,brackets"`
+	}
+	body, _ := query.Values(struct{
+		Report bodyReport `url:"report,brackets"`
+	}{
+		Report: bodyReport{
+			Title: *report.Title,
+			VulnerabilityInformation: *report.VulnerabilityInformation,
+			VulnerabilityTypeIDs: vulnerabilityTypeIds,
+		},
+	})
 
 	req, err := s.client.NewRequest("POST", fmt.Sprintf("%s/reports", handle), bytes.NewBufferString(body.Encode()))
 	if err != nil {

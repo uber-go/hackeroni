@@ -21,7 +21,7 @@
 package legacy
 
 import (
-//	"fmt"
+	"fmt"
 )
 
 // TeamService handles communication with the report related methods of the H1 API.
@@ -166,3 +166,20 @@ func (s *TeamService) ListCommonResponses(handle string) ([]CommonResponse, *Res
 
 	return commonResponses, resp, err
 }*/
+
+func (s *TeamService) ListVulnerabilityTypes(handle string) ([]VulnerabilityType, *Response, error) {
+	req, err := s.client.NewRequest("GET", fmt.Sprintf("%s/vulnerability_types", handle), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("X-Requested-With", "XMLHttpRequest")
+
+	var vulnerabilityTypes []VulnerabilityType
+	resp, err := s.client.Do(req, &vulnerabilityTypes)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return vulnerabilityTypes, resp, err
+}
