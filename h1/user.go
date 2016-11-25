@@ -42,6 +42,9 @@ type User struct {
 	Username       *string            `json:"username"`
 	Name           *string            `json:"name"`
 	ProfilePicture UserProfilePicture `json:"profile_picture"`
+	Reputation     *uint64            `json:"reputation"`
+	Signal         *float64           `json:"signal"`
+	Impact         *float64           `json:"impact"`
 	CreatedAt      *Timestamp         `json:"created_at"`
 }
 

@@ -11,6 +11,9 @@
       "82x82": "/assets/avatars/default.png",
       "110x110": "/assets/avatars/default.png",
       "260x260": "/assets/avatars/default.png"
-    }
+    },
+    "reputation": 7,
+    "signal": 7.0,
+    "impact": 30.0
   }
 }

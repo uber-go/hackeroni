@@ -77,3 +77,9 @@ func String(v string) *string { return &v }
 
 // Int allocates a new bool value to store v at and returns a pointer to it.
 func Int(v int) *int { return &v }
+
+// Uint64 allocates a new uint64 value to store v at and returns a pointer to it.
+func Uint64(v uint64) *uint64 { return &v }
+
+// Float64 allocates a new float64 value to store v at and returns a pointer to it.
+func Float64(v float64) *float64 { return &v }
