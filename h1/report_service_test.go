@@ -120,7 +120,7 @@ func Test_ReportService_CreateComment(t *testing.T) {
 	// Verify that an invalid url fails
 	c := NewClient(nil)
 	c.BaseURL = &url.URL{}
-	_, _, err := c.Report.CreateComment("%A", nil)
+	_, _, err := c.Report.CreateComment("%A", "A fix has been deployed. Can you retest, please?", false)
 	assert.NotNil(t, err)
 
 	// Verify that an error response fails
@@ -131,7 +131,7 @@ func Test_ReportService_CreateComment(t *testing.T) {
 	u, err := url.Parse(errorServer.URL)
 	assert.Nil(t, err)
 	c.BaseURL = u
-	_, _, err = c.Report.CreateComment("123456", nil)
+	_, _, err = c.Report.CreateComment("123456", "A fix has been deployed. Can you retest, please?", false)
 	assert.NotNil(t, err)
 
 	// Verify that it gets a response correctly and it has the correct request body
@@ -151,15 +151,101 @@ func Test_ReportService_CreateComment(t *testing.T) {
 	u, err = url.Parse(commentServer.URL)
 	assert.Nil(t, err)
 	c.BaseURL = u
-	actual, _, err := c.Report.CreateComment("123456", &Activity{
-		Type:     String(ActivityCommentType),
-		Internal: Bool(false),
-		Message:  String("A fix has been deployed. Can you retest, please?"),
-	})
+	actual, _, err := c.Report.CreateComment("123456", "A fix has been deployed. Can you retest, please?", false)
 	assert.Nil(t, err)
 	actual.RawActor = nil
 	actual.rawData = nil
 	assert.Equal(t, &expectedComment, actual)
+}
+
+var expectedUpdateAssigneeRequest1 = `{"data":{"type":"nobody","attributes":{"message":"@member Please check this out!"}}}`
+var expectedUpdateAssigneeRequest2 = `{"data":{"id":"1337","type":"user","attributes":{"message":"@member Please check this out!"}}}`
+var expectedUpdateAssigneeRequest3 = `{"data":{"id":"1337","type":"group","attributes":{"message":"@member Please check this out!"}}}`
+
+func Test_ReportService_UpdateAssignee(t *testing.T) {
+	// Verify that an invalid url fails
+	c := NewClient(nil)
+	c.BaseURL = &url.URL{}
+	_, _, err := c.Report.UpdateAssignee("%A", "", nil)
+	assert.NotNil(t, err)
+
+	// Verify that an error response fails
+	errorServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Oh No", 500)
+	}))
+	defer errorServer.Close()
+	u, err := url.Parse(errorServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	_, _, err = c.Report.UpdateAssignee("123456", "", nil)
+	assert.NotNil(t, err)
+
+	// Verify that it gets a response correctly and it has the correct request body
+	reportServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if strings.TrimSpace(string(body)) != strings.TrimSpace(expectedUpdateAssigneeRequest1) {
+			http.Error(w, "Non-matching request!", http.StatusBadRequest)
+			return
+		}
+		http.ServeFile(w, r, "tests/responses/report.json")
+	}))
+	defer reportServer.Close()
+	u, err = url.Parse(reportServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	actual, _, err := c.Report.UpdateAssignee("123456", "@member Please check this out!", nil)
+	assert.Nil(t, err)
+	assert.Equal(t, &expectedReport, actual)
+
+	// Verify that it gets a response correctly and it has the correct request body
+	reportServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if strings.TrimSpace(string(body)) != strings.TrimSpace(expectedUpdateAssigneeRequest2) {
+			http.Error(w, "Non-matching request!", http.StatusBadRequest)
+			return
+		}
+		http.ServeFile(w, r, "tests/responses/report.json")
+	}))
+	defer reportServer.Close()
+	u, err = url.Parse(reportServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	actual, _, err = c.Report.UpdateAssignee("123456", "@member Please check this out!", &User{
+		ID: String("1337"),
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, &expectedReport, actual)
+
+	// Verify that it gets a response correctly and it has the correct request body
+	reportServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if strings.TrimSpace(string(body)) != strings.TrimSpace(expectedUpdateAssigneeRequest3) {
+			http.Error(w, "Non-matching request!", http.StatusBadRequest)
+			return
+		}
+		http.ServeFile(w, r, "tests/responses/report.json")
+	}))
+	defer reportServer.Close()
+	u, err = url.Parse(reportServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	actual, _, err = c.Report.UpdateAssignee("123456", "@member Please check this out!", &Group{
+		ID: String("1337"),
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, &expectedReport, actual)
 }
 
 func Test_ReportService_List(t *testing.T) {
