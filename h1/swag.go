@@ -31,7 +31,7 @@ type Swag struct {
 	ID        *string    `json:"id"`
 	Type      *string    `json:"type"`
 	Sent      *bool      `json:"sent"`
-	UpdatedAt *Timestamp `json:"created_at"`
+	CreatedAt *Timestamp `json:"created_at"`
 	Address   *Address   `json:"address,omitempty"`
 }
 

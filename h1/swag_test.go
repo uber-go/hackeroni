@@ -33,7 +33,7 @@ func Test_Swag(t *testing.T) {
 		ID:        String("1337"),
 		Type:      String(SwagType),
 		Sent:      Bool(false),
-		UpdatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
 		Address: &Address{
 			ID:          String("1337"),
 			Type:        String(AddressType),
