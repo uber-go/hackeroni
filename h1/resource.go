@@ -63,6 +63,7 @@ const (
 	GroupType                                   string = "group"
 	ProgramType                                 string = "program"
 	ReportSummaryType                           string = "report-summary"
+	MemberType                                  string = "member"
 	ReportType                                  string = "report"
 	SwagType                                    string = "swag"
 	UserType                                    string = "user"

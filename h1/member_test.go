@@ -26,18 +26,33 @@ import (
 	"testing"
 )
 
-func Test_Group(t *testing.T) {
-	var actual Group
-	loadResource(t, &actual, "tests/resources/group.json")
-	expected := Group{
+func Test_Member(t *testing.T) {
+	var actual Member
+	loadResource(t, &actual, "tests/resources/member.json")
+	expected := Member{
 		ID:   String("1337"),
-		Type: String(GroupType),
-		Name: String("Admin"),
+		Type: String(MemberType),
 		Permissions: []*string{
-			String(GroupPermissionUserManagement),
-			String(GroupPermissionReportManagement),
+			String(MemberPermissionProgramManagement),
+			String(MemberPermissionReportManagement),
+			String(MemberPermissionRewardManagement),
+			String(MemberPermissionUserManagement),
 		},
 		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		User: &User{
+			ID:       String("1337"),
+			Type:     String(UserType),
+			Disabled: Bool(false),
+			Username: String("api-example"),
+			Name:     String("API Example"),
+			ProfilePicture: UserProfilePicture{
+				Size62x62:   String("/assets/avatars/default.png"),
+				Size82x82:   String("/assets/avatars/default.png"),
+				Size110x110: String("/assets/avatars/default.png"),
+				Size260x260: String("/assets/avatars/default.png"),
+			},
+			CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		},
 	}
 	assert.Equal(t, expected, actual)
 }

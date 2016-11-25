@@ -21,23 +21,24 @@
 package h1
 
 import (
-	"github.com/stretchr/testify/assert"
-
-	"testing"
+	"fmt"
 )
 
-func Test_Group(t *testing.T) {
-	var actual Group
-	loadResource(t, &actual, "tests/resources/group.json")
-	expected := Group{
-		ID:   String("1337"),
-		Type: String(GroupType),
-		Name: String("Admin"),
-		Permissions: []*string{
-			String(GroupPermissionUserManagement),
-			String(GroupPermissionReportManagement),
-		},
-		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+// ProgramService handles communication with the program related methods of the H1 API.
+type ProgramService service
+
+// Get fetches a Program by ID
+func (s *ProgramService) Get(ID string) (*Program, *Response, error) {
+	req, err := s.client.NewRequest("GET", fmt.Sprintf("programs/%s", ID), nil)
+	if err != nil {
+		return nil, nil, err
 	}
-	assert.Equal(t, expected, actual)
+
+	rResp := new(Program)
+	resp, err := s.client.Do(req, rResp)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return rResp, resp, err
 }

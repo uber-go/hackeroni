@@ -51,7 +51,8 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the H1 API.
-	Report *ReportService
+	Report  *ReportService
+	Program *ProgramService
 }
 
 type service struct {
@@ -100,6 +101,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 	c.common.client = c
 	c.Report = (*ReportService)(&c.common)
+	c.Program = (*ProgramService)(&c.common)
 
 	return c
 }
