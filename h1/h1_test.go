@@ -27,6 +27,7 @@ import (
 	"bytes"
 	"io"
 	"io/ioutil"
+	"math"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -142,6 +143,14 @@ func Test_NewRequest(t *testing.T) {
 	// Check that an invalid URL fails
 	client := NewClient(nil)
 	_, err := client.NewRequest("GET", "http://[fe80::1%en0]/", nil)
+	assert.NotNil(t, err)
+
+	// Check that an invalid body fails
+	_, err = client.NewRequest("GET", "/", struct {
+		InvalidField float64 `json:"invalid_field"`
+	}{
+		math.NaN(),
+	})
 	assert.NotNil(t, err)
 
 	// Check that an invalid base URL fails

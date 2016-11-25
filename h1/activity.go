@@ -29,42 +29,64 @@ import (
 // HackerOne API docs: https://api.hackerone.com/docs/v1#activity
 type Activity struct {
 	report      *Report
-	ID          *string         `json:"id"`
-	Type        *string         `json:"type"`
-	Message     *string         `json:"message"`
-	Internal    *bool           `json:"internal"`
-	CreatedAt   *Timestamp      `json:"created_at"`
-	UpdatedAt   *Timestamp      `json:"updated_at"`
-	RawActor    json.RawMessage `json:"actor"` // Used by the Actor() method
+	ID          *string         `json:"-"`
+	Type        *string         `json:"-"`
+	Message     *string         `json:"message,omitempty"`
+	Internal    *bool           `json:"internal,omitempty"`
+	CreatedAt   *Timestamp      `json:"created_at,omitempty"`
+	UpdatedAt   *Timestamp      `json:"updated_at,omitempty"`
+	RawActor    json.RawMessage `json:"actor,omitempty"` // Used by the Actor() method
 	Attachments []Attachment    `json:"attachments,omitempty"`
 	rawData     []byte          // Used by the Activity() method
 }
 
 // Helper types for JSONUnmarshal
 type activity Activity // Used to avoid recursion of JSONUnmarshal
-type activityUnmarshalHelper struct {
-	activity
+type activityJSONHelper struct {
+	ID            *string   `json:"id,omitempty"`
+	Type          *string   `json:"type,omitempty"`
 	Attributes    *activity `json:"attributes"`
-	Relationships struct {
-		Attachments struct {
-			Data []Attachment `json:"data"`
+	Relationships *struct {
+		Attachments *struct {
+			Data []Attachment `json:"data,omitempty"`
 		} `json:"attachments,omitempty"`
-		RawActor struct {
-			Data json.RawMessage `json:"data"`
-		} `json:"actor"`
-	} `json:"relationships"`
+		RawActor *struct {
+			Data json.RawMessage `json:"data,omitempty"`
+		} `json:"actor,omitempty"`
+	} `json:"relationships,omitempty"`
+}
+
+// MarshalJSON allows JSONAPI attributes and relationships to unmarshal cleanly.
+func (a *Activity) MarshalJSON() ([]byte, error) {
+	act := activity(*a)
+	helper := activityJSONHelper{
+		ID:         a.ID,
+		Type:       a.Type,
+		Attributes: &act,
+	}
+	// TODO: Build relationships if needed
+	//helper.Relationships.Attachments.Data = act.Attachments
+	act.Attachments = nil
+	return json.Marshal(&helper)
 }
 
 // UnmarshalJSON allows JSONAPI attributes and relationships to unmarshal cleanly.
 func (a *Activity) UnmarshalJSON(b []byte) error {
-	var helper activityUnmarshalHelper
-	helper.Attributes = &helper.activity
+	var helper activityJSONHelper
 	if err := json.Unmarshal(b, &helper); err != nil {
 		return err
 	}
-	*a = Activity(helper.activity)
-	a.Attachments = helper.Relationships.Attachments.Data
-	a.RawActor = helper.Relationships.RawActor.Data
+	*a = Activity(*helper.Attributes)
+	a.ID = helper.ID
+	a.Type = helper.Type
+	if helper.Relationships != nil {
+		if helper.Relationships.Attachments != nil {
+			a.Attachments = helper.Relationships.Attachments.Data
+		}
+		if helper.Relationships.RawActor != nil {
+			a.RawActor = helper.Relationships.RawActor.Data
+		}
+	}
 	a.rawData = b
 	return nil
 }

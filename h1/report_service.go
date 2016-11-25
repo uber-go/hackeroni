@@ -44,6 +44,22 @@ func (s *ReportService) Get(ID string) (*Report, *Response, error) {
 	return rResp, resp, err
 }
 
+// CreateComment creates a Comment on a report by ID
+func (s *ReportService) CreateComment(ID string, comment *Activity) (*Activity, *Response, error) {
+	req, err := s.client.NewRequest("POST", fmt.Sprintf("reports/%s/activities", ID), comment)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rResp := new(Activity)
+	resp, err := s.client.Do(req, rResp)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return rResp, resp, err
+}
+
 // ReportListFilter specifies optional parameters to the ReportService.List method.
 //
 // HackerOne API docs: https://api.hackerone.com/docs/v1#reports/query

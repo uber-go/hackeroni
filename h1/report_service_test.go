@@ -23,9 +23,11 @@ package h1
 import (
 	"github.com/stretchr/testify/assert"
 
+	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -102,6 +104,62 @@ func Test_ReportService_Get(t *testing.T) {
 	actual, _, err := c.Report.Get("123456")
 	assert.Nil(t, err)
 	assert.Equal(t, &expectedReport, actual)
+}
+
+var expectedCommentRequest = `{"data":{"type":"activity-comment","attributes":{"message":"A fix has been deployed. Can you retest, please?","internal":false}}}`
+var expectedComment = Activity{
+	ID:        String("1337"),
+	Type:      String(ActivityCommentType),
+	Message:   String("A fix has been deployed. Can you retest, please?"),
+	Internal:  Bool(false),
+	CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+	UpdatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+}
+
+func Test_ReportService_CreateComment(t *testing.T) {
+	// Verify that an invalid url fails
+	c := NewClient(nil)
+	c.BaseURL = &url.URL{}
+	_, _, err := c.Report.CreateComment("%A", nil)
+	assert.NotNil(t, err)
+
+	// Verify that an error response fails
+	errorServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Oh No", 500)
+	}))
+	defer errorServer.Close()
+	u, err := url.Parse(errorServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	_, _, err = c.Report.CreateComment("123456", nil)
+	assert.NotNil(t, err)
+
+	// Verify that it gets a response correctly and it has the correct request body
+	commentServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if strings.TrimSpace(string(body)) != strings.TrimSpace(expectedCommentRequest) {
+			http.Error(w, "Non-matching request!", http.StatusBadRequest)
+			return
+		}
+		http.ServeFile(w, r, "tests/responses/report_create-comment.json")
+	}))
+	defer commentServer.Close()
+	u, err = url.Parse(commentServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	actual, _, err := c.Report.CreateComment("123456", &Activity{
+		Type:     String(ActivityCommentType),
+		Internal: Bool(false),
+		Message:  String("A fix has been deployed. Can you retest, please?"),
+	})
+	assert.Nil(t, err)
+	actual.RawActor = nil
+	actual.rawData = nil
+	assert.Equal(t, &expectedComment, actual)
 }
 
 func Test_ReportService_List(t *testing.T) {
