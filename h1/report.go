@@ -64,6 +64,7 @@ type Report struct {
 	Attachments              []Attachment        `json:"attachments,omitempty"`
 	Swag                     []Swag              `json:"swag,omitempty"`
 	VulnerabilityTypes       []VulnerabilityType `json:"vulnerability_types"`
+	Severity                 *Severity           `json:"severity,omitempty"`
 	Reporter                 *User               `json:"reporter,omitempty"`
 	Activities               []Activity          `json:"activities,omitempty"`
 	Bounties                 []Bounty            `json:"bounties,omitempty"`
@@ -91,6 +92,9 @@ type reportUnmarshalHelper struct {
 		VulnerabilityTypes struct {
 			Data []VulnerabilityType `json:"data"`
 		} `json:"vulnerability_types"`
+		Severity struct {
+			Data *Severity `json:"data"`
+		} `json:"severity"`
 		Reporter struct {
 			Data *User `json:"data"`
 		} `json:"reporter"`
@@ -119,6 +123,7 @@ func (r *Report) UnmarshalJSON(b []byte) error {
 	r.Attachments = helper.Relationships.Attachments.Data
 	r.Swag = helper.Relationships.Swag.Data
 	r.VulnerabilityTypes = helper.Relationships.VulnerabilityTypes.Data
+	r.Severity = helper.Relationships.Severity.Data
 	r.Reporter = helper.Relationships.Reporter.Data
 	r.Activities = helper.Relationships.Activities.Data
 	for idx := range r.Activities {

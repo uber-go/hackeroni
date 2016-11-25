@@ -1,0 +1,19 @@
+{
+  "id": "57",
+  "type": "severity",
+  "attributes": {
+    "rating": "high",
+    "author_type": "User",
+    "user_id": 1337,
+    "created_at": "2016-02-02T04:05:06.000Z",
+    "score": 8.7,
+    "attack_complexity": "low",
+    "attack_vector": "adjacent",
+    "availability": "high",
+    "confidentiality": "low",
+    "integrity": "high",
+    "privileges_required": "low",
+    "user_interaction": "required",
+    "scope": "changed"
+  }
+}

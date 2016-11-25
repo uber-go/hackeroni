@@ -54,6 +54,7 @@ const (
 	ActivityReportBecamePublicType              string = "activity-report-became-public"
 	ActivityReportTitleUpdatedType              string = "activity-report-title-updated"
 	ActivityReportVulnerabilityTypesUpdatedType string = "activity-report-vulnerability-types-updated"
+	ActivityReportSeverityUpdatedType           string = "activity-report-severity-updated"
 	ActivitySwagAwardedType                     string = "activity-swag-awarded"
 	ActivityUserAssignedToBugType               string = "activity-user-assigned-to-bug"
 	ActivityUserBannedFromProgramType           string = "activity-user-banned-from-program"
@@ -65,6 +66,7 @@ const (
 	ReportSummaryType                           string = "report-summary"
 	ReportType                                  string = "report"
 	SwagType                                    string = "swag"
+	SeverityType                                string = "severity"
 	UserType                                    string = "user"
 	VulnerabilityTypeType                       string = "vulnerability-type"
 )
@@ -77,3 +79,6 @@ func String(v string) *string { return &v }
 
 // Int allocates a new bool value to store v at and returns a pointer to it.
 func Int(v int) *int { return &v }
+
+// Float64 allocates a new float64 value to store v at and returns a pointer to it.
+func Float64(v float64) *float64 { return &v }
