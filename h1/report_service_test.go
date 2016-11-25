@@ -248,6 +248,48 @@ func Test_ReportService_UpdateAssignee(t *testing.T) {
 	assert.Equal(t, &expectedReport, actual)
 }
 
+var expectedStateChangeRequest = `{"data":{"type":"state-change","attributes":{"message":"This vulnerability has been resolved. Thanks!","state":"resolved"}}}`
+
+func Test_ReportService_UpdateState(t *testing.T) {
+	// Verify that an invalid url fails
+	c := NewClient(nil)
+	c.BaseURL = &url.URL{}
+	_, _, err := c.Report.UpdateState("%A", "", "")
+	assert.NotNil(t, err)
+
+	// Verify that an error response fails
+	errorServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "Oh No", 500)
+	}))
+	defer errorServer.Close()
+	u, err := url.Parse(errorServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	_, _, err = c.Report.UpdateState("123456", "", "")
+	assert.NotNil(t, err)
+
+	// Verify that it gets a response correctly and it has the correct request body
+	reportServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+		if strings.TrimSpace(string(body)) != strings.TrimSpace(expectedStateChangeRequest) {
+			http.Error(w, "Non-matching request!", http.StatusBadRequest)
+			return
+		}
+		http.ServeFile(w, r, "tests/responses/report.json")
+	}))
+	defer reportServer.Close()
+	u, err = url.Parse(reportServer.URL)
+	assert.Nil(t, err)
+	c.BaseURL = u
+	actual, _, err := c.Report.UpdateState("123456", ReportStateResolved, "This vulnerability has been resolved. Thanks!")
+	assert.Nil(t, err)
+	assert.Equal(t, &expectedReport, actual)
+}
+
 func Test_ReportService_List(t *testing.T) {
 
 	// Verify that an invalid url fails
