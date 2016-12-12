@@ -60,8 +60,11 @@ type service struct {
 
 // ListOptions specifies the optional parameters to various List methods that support pagination.
 type ListOptions struct {
-	// For paginated result which page to retrieve.
+	// For paginated results which page to retrieve.
 	Page uint64 `url:"page[number],omitempty"`
+
+	// For paginated results the size of pages to retrieve
+	PageSize uint64 `url:"page[size],omitempty"`
 
 	// For lists the index to sort by
 	Sort string `url:"sort,omitempty"`
