@@ -24,8 +24,10 @@ package h1
 import (
 	"github.com/google/go-querystring/query"
 
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -109,6 +111,11 @@ func NewClient(httpClient *http.Client) *Client {
 	return c
 }
 
+// dataRequest is used to cast requests to H1
+type dataRequest struct {
+	Data interface{} `json:"data,omitempty"`
+}
+
 // NewRequest creates an API request. A relative URL can be provided in urlStr
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	rel, err := url.Parse(urlStr)
@@ -116,9 +123,25 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		return nil, err
 	}
 
-	req, err := http.NewRequest(method, c.BaseURL.ResolveReference(rel).String(), nil)
+	var buf io.ReadWriter
+	if body != nil {
+		buf = new(bytes.Buffer)
+		dat := dataRequest{
+			Data: body,
+		}
+		err := json.NewEncoder(buf).Encode(&dat)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	req, err := http.NewRequest(method, c.BaseURL.ResolveReference(rel).String(), buf)
 	if err != nil {
 		return nil, err
+	}
+
+	if body != nil {
+		req.Header.Add("Content-Type", "application/json")
 	}
 
 	req.Header.Add("User-Agent", c.UserAgent)

@@ -44,6 +44,104 @@ func (s *ReportService) Get(ID string) (*Report, *Response, error) {
 	return rResp, resp, err
 }
 
+// CreateComment creates a Comment on a report by ID
+func (s *ReportService) CreateComment(ID string, message string, internal bool) (*Activity, *Response, error) {
+	comment := &Activity{
+		Type:     String(ActivityCommentType),
+		Internal: &internal,
+		Message:  &message,
+	}
+
+	req, err := s.client.NewRequest("POST", fmt.Sprintf("reports/%s/activities", ID), comment)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rResp := new(Activity)
+	resp, err := s.client.Do(req, rResp)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return rResp, resp, err
+}
+
+// reportUpdateAssigneeRequest is used for making report assignee updates
+type reportUpdateAssigneeRequestAttributes struct {
+	Message string `json:"message"`
+}
+type reportUpdateAssigneeRequest struct {
+	ID         *string                               `json:"id,omitempty"`
+	Type       string                                `json:"type"`
+	Attributes reportUpdateAssigneeRequestAttributes `json:"attributes"`
+}
+
+// UpdateAssignee creates a Comment on a report by ID
+func (s *ReportService) UpdateAssignee(ID string, message string, assignee interface{}) (*Report, *Response, error) {
+	request := &reportUpdateAssigneeRequest{
+		Attributes: reportUpdateAssigneeRequestAttributes{
+			Message: message,
+		},
+	}
+	switch assignee.(type) {
+	case *User:
+		request.ID = assignee.(*User).ID
+		request.Type = "user"
+	case *Group:
+		request.ID = assignee.(*Group).ID
+		request.Type = "group"
+	default:
+		request.Type = "nobody"
+	}
+
+	req, err := s.client.NewRequest("PUT", fmt.Sprintf("reports/%s/assignee", ID), request)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rResp := new(Report)
+	resp, err := s.client.Do(req, rResp)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return rResp, resp, err
+}
+
+// reportUpdateAssigneeRequest is used for making report assignee updates
+type reportStateChangeRequestAttributes struct {
+	Message string `json:"message,omitempty"`
+	State   string `json:"state"`
+}
+type reportStateChangeRequest struct {
+	Type       string                             `json:"type"`
+	Attributes reportStateChangeRequestAttributes `json:"attributes"`
+}
+
+// UpdateState changes a report's state by ID
+func (s *ReportService) UpdateState(ID string, state string, message string) (*Report, *Response, error) {
+	request := &reportStateChangeRequest{
+		Type: "state-change",
+		Attributes: reportStateChangeRequestAttributes{
+			Message: message,
+			State:   state,
+		},
+	}
+
+	req, err := s.client.NewRequest("POST", fmt.Sprintf("reports/%s/state_changes", ID), request)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	rResp := new(Report)
+	resp, err := s.client.Do(req, rResp)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	return rResp, resp, err
+}
+
 // ReportListFilter specifies optional parameters to the ReportService.List method.
 //
 // HackerOne API docs: https://api.hackerone.com/docs/v1#reports/query
