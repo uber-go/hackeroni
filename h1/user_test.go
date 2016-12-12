@@ -41,7 +41,10 @@ func Test_User(t *testing.T) {
 			Size110x110: String("/assets/avatars/default.png"),
 			Size260x260: String("/assets/avatars/default.png"),
 		},
-		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		Reputation: Uint64(7),
+		Signal:     Float64(7.0),
+		Impact:     Float64(30.0),
+		CreatedAt:  NewTimestamp("2016-02-02T04:05:06.000Z"),
 	}
 	assert.Equal(t, expected, actual)
 }
