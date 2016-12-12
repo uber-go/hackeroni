@@ -789,6 +789,22 @@ func Test_ActivityReportVulnerabilityTypesUpdated(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func Test_ActivityReportSeverityUpdated(t *testing.T) {
+	var actual Activity
+	loadResource(t, &actual, "tests/resources/activity-report-severity-updated.json")
+	expected := Activity{
+		ID:        String("1337"),
+		Type:      String(ActivityReportSeverityUpdatedType),
+		Message:   String("Report Severity Updated!"),
+		Internal:  Bool(false),
+		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		UpdatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+	}
+	actual.rawData = nil
+	actual.RawActor = nil
+	assert.Equal(t, expected, actual)
+}
+
 func Test_ActivitySwagAwarded(t *testing.T) {
 	var actual Activity
 	loadResource(t, &actual, "tests/resources/activity-swag-awarded.json")
