@@ -24,43 +24,47 @@ import (
 	"encoding/json"
 )
 
-// Program represents a overall program.
+// MemberPermission represent possible permissions sizes for a member
 //
-// HackerOne API docs: https://api.hackerone.com/docs/v1#program
-type Program struct {
-	ID        *string    `json:"id"`
-	Type      *string    `json:"type"`
-	Handle    *string    `json:"handle"`
-	CreatedAt *Timestamp `json:"created_at"`
-	UpdatedAt *Timestamp `json:"updated_at"`
-	Groups    []*Group   `json:"groups,omitempty"`
-	Members   []*Member  `json:"member,omitempty"`
+// HackerOne API docs: https://api.hackerone.com/docs/v1#member
+const (
+	MemberPermissionRewardManagement  string = "reward_management"
+	MemberPermissionProgramManagement string = "program_management"
+	MemberPermissionUserManagement    string = "user_management"
+	MemberPermissionReportManagement  string = "report_management"
+)
+
+// Member represents a user in a program
+//
+// HackerOne API docs: https://api.hackerone.com/docs/v1#member
+type Member struct {
+	ID          *string    `json:"id"`
+	Type        *string    `json:"type"`
+	Permissions []*string  `json:"permissions"`
+	CreatedAt   *Timestamp `json:"created_at"`
+	User        *User      `json:"user"`
 }
 
 // Helper types for JSONUnmarshal
-type program Program // Used to avoid recursion of JSONUnmarshal
-type programUnmarshalHelper struct {
-	program
-	Attributes    *program `json:"attributes"`
+type member Member // Used to avoid recursion of JSONUnmarshal
+type memberUnmarshalHelper struct {
+	member
+	Attributes    *member `json:"attributes"`
 	Relationships struct {
-		Groups struct {
-			Data []*Group `json:"data"`
-		} `json:"groups"`
-		Members struct {
-			Data []*Member `json:"data"`
-		} `json:"members"`
+		User struct {
+			Data *User `json:"data"`
+		} `json:"user"`
 	} `json:"relationships"`
 }
 
 // UnmarshalJSON allows JSONAPI attributes and relationships to unmarshal cleanly.
-func (p *Program) UnmarshalJSON(b []byte) error {
-	var helper programUnmarshalHelper
-	helper.Attributes = &helper.program
+func (m *Member) UnmarshalJSON(b []byte) error {
+	var helper memberUnmarshalHelper
+	helper.Attributes = &helper.member
 	if err := json.Unmarshal(b, &helper); err != nil {
 		return err
 	}
-	*p = Program(helper.program)
-	p.Groups = helper.Relationships.Groups.Data
-	p.Members = helper.Relationships.Members.Data
+	*m = Member(helper.member)
+	m.User = helper.Relationships.User.Data
 	return nil
 }

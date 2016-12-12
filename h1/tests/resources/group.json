@@ -3,6 +3,10 @@
   "type": "group",
   "attributes": {
     "name": "Admin",
-    "created_at": "2016-02-02T04:05:06.000Z"
+    "created_at": "2016-02-02T04:05:06.000Z",
+    "permissions": [
+      "user_management",
+      "report_management"
+    ]
   }
 }

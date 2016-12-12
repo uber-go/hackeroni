@@ -24,14 +24,25 @@ import (
 	"encoding/json"
 )
 
+// GroupPermission represent possible permissions sizes for a group
+//
+// HackerOne API docs: https://api.hackerone.com/docs/v1#group
+const (
+	GroupPermissionRewardManagement  string = "reward_management"
+	GroupPermissionProgramManagement string = "program_management"
+	GroupPermissionUserManagement    string = "user_management"
+	GroupPermissionReportManagement  string = "report_management"
+)
+
 // Group represents a group of users.
 //
 // HackerOne API docs: https://api.hackerone.com/docs/v1#group
 type Group struct {
-	ID        *string    `json:"id"`
-	Type      *string    `json:"type"`
-	Name      *string    `json:"name"`
-	CreatedAt *Timestamp `json:"created_at"`
+	ID          *string    `json:"id"`
+	Type        *string    `json:"type"`
+	Name        *string    `json:"name"`
+	Permissions []*string  `json:"permissions"`
+	CreatedAt   *Timestamp `json:"created_at"`
 }
 
 // Helper types for JSONUnmarshal

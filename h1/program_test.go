@@ -35,6 +35,55 @@ func Test_Program(t *testing.T) {
 		Handle:    String("security"),
 		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
 		UpdatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+		Groups: []*Group{
+			&Group{
+				ID:   String("2557"),
+				Type: String(GroupType),
+				Name: String("Standard"),
+				Permissions: []*string{
+					String(GroupPermissionReportManagement),
+					String(GroupPermissionRewardManagement),
+				},
+				CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+			},
+			&Group{
+				ID:   String("2558"),
+				Type: String(GroupType),
+				Name: String("Admin"),
+				Permissions: []*string{
+					String(GroupPermissionUserManagement),
+					String(GroupPermissionProgramManagement),
+				},
+				CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+			},
+		},
+		Members: []*Member{
+			&Member{
+				ID:   String("1339"),
+				Type: String(MemberType),
+				Permissions: []*string{
+					String(MemberPermissionProgramManagement),
+					String(MemberPermissionReportManagement),
+					String(MemberPermissionRewardManagement),
+					String(MemberPermissionUserManagement),
+				},
+				CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+				User: &User{
+					ID:       String("1337"),
+					Type:     String(UserType),
+					Disabled: Bool(false),
+					Username: String("api-example"),
+					Name:     String("API Example"),
+					ProfilePicture: UserProfilePicture{
+						Size62x62:   String("/assets/avatars/default.png"),
+						Size82x82:   String("/assets/avatars/default.png"),
+						Size110x110: String("/assets/avatars/default.png"),
+						Size260x260: String("/assets/avatars/default.png"),
+					},
+					CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+				},
+			},
+		},
 	}
 	assert.Equal(t, expected, actual)
 }

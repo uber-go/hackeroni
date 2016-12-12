@@ -18,26 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-package h1
+package main
 
 import (
-	"github.com/stretchr/testify/assert"
+	"github.com/uber-go/hackeroni/h1"
 
-	"testing"
+	"golang.org/x/crypto/ssh/terminal"
+
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+	"syscall"
 )
 
-func Test_Group(t *testing.T) {
-	var actual Group
-	loadResource(t, &actual, "tests/resources/group.json")
-	expected := Group{
-		ID:   String("1337"),
-		Type: String(GroupType),
-		Name: String("Admin"),
-		Permissions: []*string{
-			String(GroupPermissionUserManagement),
-			String(GroupPermissionReportManagement),
-		},
-		CreatedAt: NewTimestamp("2016-02-02T04:05:06.000Z"),
+func main() {
+
+	fmt.Print("HackerOne API Identifier: ")
+	r := bufio.NewReader(os.Stdin)
+	identifier, _ := r.ReadString('\n')
+
+	fmt.Print("HackerOne API Token: ")
+	token, _ := terminal.ReadPassword(int(syscall.Stdin))
+	fmt.Print("\n")
+
+	tp := h1.APIAuthTransport{
+		APIIdentifier: strings.TrimSpace(identifier),
+		APIToken:      strings.TrimSpace(string(token)),
 	}
-	assert.Equal(t, expected, actual)
+
+	client := h1.NewClient(tp.Client())
+
+	fmt.Print("Program ID: ")
+	programID, _ := r.ReadString('\n')
+	fmt.Print("\n")
+
+	program, _, err := client.Program.Get(strings.TrimSpace(programID))
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("Program: %#v\n", program)
+
 }
